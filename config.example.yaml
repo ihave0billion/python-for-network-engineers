@@ -1,0 +1,31 @@
+# Copy this file to config.yaml and fill in your CML/lab details.
+# config.yaml is gitignored — never commit real IPs or credentials.
+
+cml:
+  # Cisco router type used in your CML topology.
+  # Examples: cisco_ios, cisco_xe, cisco_nxos, cisco_xr
+  device_type: cisco_xe
+
+  # SSH credentials shared by all lab routers.
+  username: REPLACE_ME
+  password: REPLACE_ME
+  port: 22
+
+  # One entry per router in your topology.
+  # `name` is how the lessons refer to it; `host` is the IP or hostname.
+  routers:
+    - name: R1
+      host: REPLACE_ME
+    - name: R2
+      host: REPLACE_ME
+    - name: R3
+      host: REPLACE_ME
+
+# Lab runner behavior.
+labs:
+  # Seconds before falling back to simulated output.
+  connect_timeout: 10
+
+  # If true, the runner will always use simulated fixtures and skip the
+  # real-router attempt. Useful for offline study sessions.
+  force_simulated: false

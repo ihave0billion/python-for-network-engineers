@@ -1,0 +1,35 @@
+# Local config that may contain real router IPs, usernames, passwords.
+# Only the *.example templates get committed.
+config.yaml
+config.yml
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+.eggs/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local app state (lives at ~/.prne/ by default, but ignore in-repo copies too)
+.prne/
+prne_progress.json
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Lab artifacts a learner might generate locally
+labs/**/output_*.txt
+labs/**/captured_*.log
