@@ -20,13 +20,14 @@ dist/
 .mypy_cache/
 .ruff_cache/
 
-# Local app state (lives at ~/.prne/ by default, but ignore in-repo copies too)
-.prne/
-prne_progress.json
+# Local app state (lives at ~/.pyne/ by default, but ignore in-repo copies too)
+.pyne/
+pyne_progress.json
 
-# Editor / OS
+# Editor / OS / agent tooling
 .vscode/
 .idea/
+.claude/
 .DS_Store
 Thumbs.db
 

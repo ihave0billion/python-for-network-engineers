@@ -1,4 +1,4 @@
-# GitHub Setup — `prne` (Python for Network Engineers app)
+# GitHub Setup — `pyne` (Python for Network Engineers app)
 
 This guide walks through publishing this project to a **public** GitHub repository
 under your personal account. Run the commands in order. Stop at each checkpoint
@@ -22,7 +22,7 @@ and confirm before continuing.
 
 ## 1. Pick a repo name and identity
 
-Suggested name: **`prne-python-for-network-engineers`** (or shorter: `prne`).
+Repo name: **`python-for-network-engineers`**. The Python package inside the repo is named `pyne` (the runnable command is `python -m pyne`).
 
 Set your local git identity (only needed once per machine):
 
@@ -52,7 +52,7 @@ These files must exist and have correct content **before** you commit:
 
 | File | Purpose |
 |---|---|
-| `.gitignore` | Excludes `config.yaml`, `.env`, `__pycache__/`, `.venv/`, `~/.prne/`, OS files |
+| `.gitignore` | Excludes `config.yaml`, `.env`, `__pycache__/`, `.venv/`, `~/.pyne/`, OS files |
 | `LICENSE` | MIT license (public repo needs one) |
 | `README.md` | Project overview, install, quickstart |
 | `config.example.yaml` | Template for router config — safe to commit |
@@ -76,10 +76,10 @@ before continuing.
 git add .gitignore LICENSE README.md GITHUB_SETUP.md \
         config.example.yaml .env.example \
         pyproject.toml \
-        lessons/ labs/ checks/ prne/ \
+        lessons/ labs/ checks/ pyne/ \
         teach-me-python.md "Python for Network Engineer notes.pdf"
 git status                      # review what's staged
-git commit -m "Initial commit: PRNE app scaffolding and existing course materials"
+git commit -m "Initial commit: pyne app scaffolding and existing course materials"
 ```
 
 > Use `git add <paths>` (above), not `git add -A` — that would catch any stray
@@ -92,7 +92,7 @@ git commit -m "Initial commit: PRNE app scaffolding and existing course material
 Using the GitHub CLI (one command for create + push):
 
 ```bash
-gh repo create prne-python-for-network-engineers \
+gh repo create python-for-network-engineers \
   --public \
   --source=. \
   --remote=origin \
@@ -103,12 +103,12 @@ gh repo create prne-python-for-network-engineers \
 If you prefer the web UI:
 
 1. Go to <https://github.com/new>
-2. Owner: your personal account · Name: `prne-python-for-network-engineers` · Public
+2. Owner: your personal account · Name: `python-for-network-engineers` · Public
 3. **Do NOT** initialize with README/license/gitignore (we already have them)
 4. Copy the SSH or HTTPS URL it shows, then:
 
 ```bash
-git remote add origin git@github.com:<your-username>/prne-python-for-network-engineers.git
+git remote add origin git@github.com:<your-username>/python-for-network-engineers.git
 git push -u origin main
 ```
 
@@ -161,6 +161,6 @@ gh pr create --fill                           # opens a PR
 ## Safety reminders
 
 - **Never** force-push to `main` (`git push --force` on a shared branch). Use a new branch instead.
-- **Never** commit `config.yaml`, `.env`, `*.pem`, or anything under `~/.prne/`.
+- **Never** commit `config.yaml`, `.env`, `*.pem`, or anything under `~/.pyne/`.
 - If you accidentally commit a secret: rotate the credential first, then remove from history (`git filter-repo` or BFG). Force-push is acceptable here, and only here.
 - Public repo means anyone can read history. Treat every push as permanent.

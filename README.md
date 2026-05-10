@@ -1,4 +1,4 @@
-# PRNE — Python for Network Engineers
+# pyne — Python for Network Engineers
 
 An interactive terminal app that teaches Python to Cisco network engineers,
 one short lesson at a time. Built on the *Programming for Network Engineers
@@ -13,7 +13,7 @@ one short lesson at a time. Built on the *Programming for Network Engineers
 | `lessons/` | Short markdown lessons (one concept each) — modules 1–8 |
 | `labs/` | Runnable Python lab files paired with each lesson |
 | `checks/` | Per-lesson knowledge-check definitions (MCQ + code task) — *coming soon* |
-| `prne/` | Textual TUI app source — *coming soon* |
+| `pyne/` | Textual TUI app source — *coming soon* |
 | `teach-me-python.md` | Course design philosophy / meta-prompt |
 | `Python for Network Engineer notes.pdf` | Source reference notes |
 | `GITHUB_SETUP.md` | First-time GitHub publishing guide |
@@ -42,8 +42,8 @@ A new opening lesson on the CLI-to-data mindset shift will precede module 1.
 
 ```bash
 # 1. Clone
-git clone https://github.com/<your-username>/prne-python-for-network-engineers.git
-cd prne-python-for-network-engineers
+git clone https://github.com/<your-username>/python-for-network-engineers.git
+cd python-for-network-engineers
 
 # 2. Create a virtualenv and install
 python3 -m venv .venv
@@ -55,7 +55,7 @@ cp config.example.yaml config.yaml
 $EDITOR config.yaml           # fill in your router IPs, username, password
 
 # 4. Run the app (coming soon)
-python -m prne
+python -m pyne
 ```
 
 ## Lab environment
