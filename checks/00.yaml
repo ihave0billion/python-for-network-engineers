@@ -1,0 +1,32 @@
+# Knowledge check for Lesson 0 — Why Automate?
+title: "Why Automate? Knowledge Check"
+
+mcq:
+  question: |
+    You need to update the SNMP community string on 250 routers tonight.
+    Which approach scales best?
+  options:
+    - "SSH into each router and paste the new config one by one."
+    - "Open a TAC case and ask Cisco to do it."
+    - "Define the new value once (in YAML or a variable), then push it to all 250 with a Python loop."
+    - "Schedule a separate change window per router."
+  answer: 3
+  explain: |
+    A single source of truth plus one script that iterates across devices is
+    the data-oriented pattern. You change one line, push once, and `git log`
+    records what changed and when.
+
+code_task:
+  prompt: |
+    Write a tiny script that prints each router name on its own line. This
+    mirrors the "iterate across devices" pattern at the heart of automation.
+
+    Use this list exactly: ["R1", "R2", "R3"]
+  starter: |
+    routers = ["R1", "R2", "R3"]
+    # TODO: print each router name on its own line
+  expected_stdout_regex: "^R1\\nR2\\nR3\\n?$"
+  hint: |
+    A `for` loop with `print()` does it in two lines:
+        for r in routers:
+            print(r)
