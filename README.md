@@ -12,8 +12,9 @@ one short lesson at a time. Built on the *Programming for Network Engineers
 |---|---|
 | `lessons/` | Short markdown lessons (one concept each) — modules 1–8 |
 | `labs/` | Runnable Python lab files paired with each lesson |
-| `checks/` | Per-lesson knowledge-check definitions (MCQ + code task) — *coming soon* |
-| `pyne/` | Textual TUI app source — *coming soon* |
+| `checks/` | Per-lesson knowledge-check definitions (MCQ + code task) |
+| `pyne/` | Textual TUI app source |
+| `tests/` | Pytest suite for the app internals |
 | `teach-me-python.md` | Course design philosophy / meta-prompt |
 | `Python for Network Engineer notes.pdf` | Source reference notes |
 | `GITHUB_SETUP.md` | First-time GitHub publishing guide |
@@ -54,9 +55,26 @@ pip install -e .              # once pyproject.toml lands
 cp config.example.yaml config.yaml
 $EDITOR config.yaml           # fill in your router IPs, username, password
 
-# 4. Run the app (coming soon)
+# 4. Run the app
 python -m pyne
 ```
+
+## App keybindings
+
+| Key | Action |
+|---|---|
+| `n` / `p` | Next / previous lesson |
+| `m` | Toggle lesson complete |
+| `c` | Open the knowledge check (if the lesson has one) |
+| `q` | Quit |
+
+Inside a knowledge check:
+
+| Key | Action |
+|---|---|
+| `Ctrl+S` | Submit the MCQ + run the code task |
+| `Ctrl+H` | Show the hint |
+| `Esc` | Back to the lesson list (passes persist on exit) |
 
 ## Lab environment
 
