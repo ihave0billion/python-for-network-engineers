@@ -1,0 +1,3 @@
+GigabitEthernet1          up
+GigabitEthernet2          down
+GigabitEthernet3          administratively down
