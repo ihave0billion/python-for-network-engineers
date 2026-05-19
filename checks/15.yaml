@@ -1,0 +1,37 @@
+# Knowledge check for Lesson 15 — Gathering and Validating User Input
+title: "User Input — Knowledge Check"
+
+mcq:
+  question: |
+    `value = input("Enter a port: ")`. What is the **type** of `value`
+    after this line runs, regardless of what the user types?
+  options:
+    - "int"
+    - "float"
+    - "str"
+    - "It depends on what the user typed."
+  answer: 3
+  explain: |
+    `input()` always returns a **string** — even if the user types
+    `22`, `value` is `"22"`, not the integer `22`. Cast explicitly when
+    you need a number: `port = int(value)`. Casting unvalidated input
+    can raise `ValueError`, which is why Lesson 17 follows with
+    `try/except` — input-handling and error-handling go together.
+
+code_task:
+  prompt: |
+    Pretend `raw` came from `input()` — it's always a string. Cast it
+    to an integer and check whether it's a valid TCP/UDP port
+    (1–65535). Print exactly `valid` if it is, otherwise `invalid`.
+  starter: |
+    raw = "22"
+    # TODO: cast `raw` to int and print "valid" if 1 <= port <= 65535, else "invalid"
+  expected_stdout_regex: "^valid\\n?$"
+  hint: |
+    Cast first, then range-check:
+
+        port = int(raw)
+        if 1 <= port <= 65535:
+            print("valid")
+        else:
+            print("invalid")

@@ -1,0 +1,40 @@
+# Knowledge check for Lesson 13 — Classes, Methods, and Inheritance
+title: "Classes and self — Knowledge Check"
+
+mcq:
+  question: |
+    Inside a class method definition, what does the first parameter —
+    conventionally called `self` — refer to?
+  options:
+    - "The class itself (used for static references)."
+    - "The specific instance the method is being called on."
+    - "A reserved keyword for the module name."
+    - "The parent class — equivalent to `super()`."
+  answer: 2
+  explain: |
+    `self` is the **instance**. When you write `r.connect()` on an
+    instance `r`, Python translates that to `Router.connect(r)` and
+    passes the instance as the first argument. Inside `__init__`,
+    `self.hostname = hostname` attaches the value to *this specific
+    instance's* namespace. The class itself is referenced by name (or
+    `type(self)`); the parent class is `super()`.
+
+code_task:
+  prompt: |
+    Define a `Router` class with an `__init__(self, hostname)` that
+    stores `hostname` on the instance. Then create an instance with
+    hostname `"R1"` and print `r.hostname`. The output must be `R1`.
+  starter: |
+    class Router:
+        # TODO: define __init__ to take a `hostname` argument and store it on self
+        pass
+
+    r = Router("R1")
+    print(r.hostname)
+  expected_stdout_regex: "^R1\\n?$"
+  hint: |
+    Replace the `pass` with an `__init__`:
+
+        class Router:
+            def __init__(self, hostname):
+                self.hostname = hostname

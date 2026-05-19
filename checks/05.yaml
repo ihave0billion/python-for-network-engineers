@@ -1,0 +1,30 @@
+# Knowledge check for Lesson 5 — Manipulating Strings
+title: "Manipulating Strings — Knowledge Check"
+
+mcq:
+  question: |
+    What does `"10.0.0.1".split(".")` return?
+  options:
+    - "['10.0.0.1']"
+    - "['10', '0', '0', '1']"
+    - "(10, 0, 0, 1)"
+    - "[10, 0, 0, 1]"
+  answer: 2
+  explain: |
+    `str.split(sep)` returns a **list of strings** — note the quotes.
+    To get integers (e.g., for arithmetic on octets), you'd map first:
+    `[int(x) for x in "10.0.0.1".split(".")]`. Forgetting to cast is a
+    classic source of `TypeError: can only concatenate str (not "int")`.
+
+code_task:
+  prompt: |
+    A router's management IP is pre-declared below. Print **just the
+    last octet** (no quotes, no other text).
+  starter: |
+    ip = "10.254.0.7"
+    # TODO: print the last octet of `ip`
+  expected_stdout_regex: "^7\\n?$"
+  hint: |
+    Split on the dot and grab the last element:
+
+        print(ip.split(".")[-1])

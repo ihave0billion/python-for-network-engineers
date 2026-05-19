@@ -1,0 +1,38 @@
+# Knowledge check for Lesson 17 — Exceptions, Error Management, Assertions
+title: "Exceptions — Knowledge Check"
+
+mcq:
+  question: |
+    Why is a bare `except:` (with no exception type) considered an
+    anti-pattern in Python?
+  options:
+    - "It's slower than catching specific exception types."
+    - "It catches **everything** — including KeyboardInterrupt and SystemExit — masking bugs and making it impossible to Ctrl+C out of a running script."
+    - "It only works in Python 2."
+    - "It triggers a runtime warning."
+  answer: 2
+  explain: |
+    A bare `except:` swallows every exception, including
+    `KeyboardInterrupt` (Ctrl+C) and `SystemExit` (deliberate exit).
+    It also hides real programming errors like `NameError` and
+    `AttributeError`, so bugs surface late and far from their cause.
+    Always catch the specific exception(s) you expect:
+    `except (ValueError, KeyError):` is fine; `except:` is a smell.
+
+code_task:
+  prompt: |
+    A "port number" read from somewhere unreliable is pre-declared as
+    a string that won't cast to int. Wrap the cast in a `try/except`
+    that catches **`ValueError`** specifically — not a bare `except` —
+    and prints exactly `not a number` on failure.
+  starter: |
+    raw = "not_a_port"
+    # TODO: try int(raw); on ValueError print "not a number"
+  expected_stdout_regex: "^not a number\\n?$"
+  hint: |
+    `try` the cast, `except ValueError` to handle it:
+
+        try:
+            port = int(raw)
+        except ValueError:
+            print("not a number")

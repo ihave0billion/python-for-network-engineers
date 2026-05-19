@@ -1,0 +1,32 @@
+# Knowledge check for Lesson 9 — Reading and Writing a JSON File
+title: "JSON — Knowledge Check"
+
+mcq:
+  question: |
+    What's the difference between `json.load()` and `json.loads()`?
+  options:
+    - "`load` reads from a file object; `loads` parses from a string."
+    - "`load` is for lists; `loads` is for sets."
+    - "`load` is synchronous; `loads` is asynchronous."
+    - "They're identical — `loads` is the deprecated form."
+  answer: 1
+  explain: |
+    Mnemonic: the trailing **s** in `loads` stands for **string**.
+    `json.load(file_handle)` reads from an open file; `json.loads(text)`
+    parses an in-memory string. Same split exists for the inverse:
+    `json.dump(obj, file)` vs `json.dumps(obj)`.
+
+code_task:
+  prompt: |
+    A JSON-encoded device record is pre-declared as a string. Parse it
+    with `json.loads` and print just the **first interface name**.
+  starter: |
+    import json
+    raw = '{"router": "R1", "interfaces": ["Gi1", "Gi2"]}'
+    # TODO: parse `raw` and print the first interface name
+  expected_stdout_regex: "^Gi1\\n?$"
+  hint: |
+    Decode the string, then index into the `interfaces` list:
+
+        data = json.loads(raw)
+        print(data["interfaces"][0])

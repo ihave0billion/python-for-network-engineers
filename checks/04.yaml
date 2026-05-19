@@ -1,0 +1,32 @@
+# Knowledge check for Lesson 4 — Lists, Tuples, Sets, and Dictionaries
+title: "Collections (List/Tuple/Set/Dict) — Knowledge Check"
+
+mcq:
+  question: |
+    You've parsed a routing table and ended up with a list of IPs that
+    contains duplicates. Which one-step conversion **dedupes** the list?
+  options:
+    - "set(ip_list)"
+    - "list(ip_list)"
+    - "dict(ip_list)"
+    - "tuple(ip_list)"
+  answer: 1
+  explain: |
+    Sets are unordered collections of **unique** elements, so wrapping a
+    list in `set(...)` drops duplicates in one pass. `list(ip_list)`
+    just makes a copy. `dict(ip_list)` would expect (key, value) pairs.
+    `tuple(...)` preserves order and duplicates — it just makes the
+    collection immutable.
+
+code_task:
+  prompt: |
+    A list of router IPs is pre-declared below — note the duplicates.
+    Print **just the count** of unique IPs (a single integer).
+  starter: |
+    ips = ["10.0.0.1", "10.0.0.2", "10.0.0.1", "10.0.0.3", "10.0.0.2"]
+    # TODO: print the number of unique IPs in the list
+  expected_stdout_regex: "^3\\n?$"
+  hint: |
+    Wrap the list in `set()` to dedupe, then call `len()`:
+
+        print(len(set(ips)))

@@ -1,0 +1,36 @@
+# Knowledge check for Lesson 11 — Reading Raw/Unstructured Data with Regex
+title: "Regex on Unstructured Output — Knowledge Check"
+
+mcq:
+  question: |
+    You're calling `conn.send_command("show ip interface brief")` via
+    Netmiko and want **structured data** (a list of dicts) instead of
+    the raw text blob Cisco prints. The cleanest approach is:
+  options:
+    - "Wrap the output in `json.loads()` — Cisco CLI is JSON-compatible."
+    - "Use `csv.reader` because show-command output is comma-separated."
+    - "Pass `use_textfsm=True` to `send_command(...)`."
+    - "Cast the output to `dict()`."
+  answer: 3
+  explain: |
+    Cisco CLI output is plain text — not JSON, not CSV. TextFSM
+    templates (shipped via the `ntc-templates` library) match patterns
+    and emit structured rows; Netmiko wires this in when you pass
+    `use_textfsm=True`. Manual regex is fine for one-off extraction,
+    but TextFSM scales because the template is reusable.
+
+code_task:
+  prompt: |
+    A single line from `show version` is pre-declared. Use `re.search`
+    to capture the **uptime in days** as a number, and print just
+    that number on a single line.
+  starter: |
+    import re
+    line = "Router R1 uptime is 12 days, 4 hours, 35 minutes"
+    # TODO: capture the number of days and print it
+  expected_stdout_regex: "^12\\n?$"
+  hint: |
+    Group the digits with `(\d+)` and pull `group(1)`:
+
+        m = re.search(r"uptime is (\d+) days", line)
+        print(m.group(1))
