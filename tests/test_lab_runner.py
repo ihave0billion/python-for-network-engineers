@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from pyne.config import CMLConfig, Router
 from pyne.lab_runner import (
     build_env,
@@ -112,6 +114,20 @@ def test_run_lab_runs_without_config_for_pure_python_lab(tmp_path: Path) -> None
 
     assert not result.simulated
     assert result.output.strip() == "unset"
+
+
+def test_run_lab_handles_relative_lab_path(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Regression: relative lab paths shouldn't double-join with cwd."""
+    _write_script(tmp_path, "lab.py", "print('relative path ok')\n")
+    monkeypatch.chdir(tmp_path.parent)
+    relative = Path(tmp_path.name)
+
+    result = run_lab(relative, config=None)
+
+    assert not result.simulated, f"expected success, got: {result.output!r}"
+    assert result.output.strip() == "relative path ok"
 
 
 def test_run_lab_injects_pyne_env_when_config_present(tmp_path: Path) -> None:

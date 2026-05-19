@@ -119,10 +119,14 @@ def run_lab(
         effective_timeout = float(DEFAULT_TIMEOUT_SECONDS)
 
     env = build_env(config, dict(os.environ))
+    # Resolve to absolute so the script path doesn't get re-joined to `cwd`
+    # when the caller hands us a relative lab_path.
+    script_abs = script.resolve()
+    cwd_abs = lab_path.resolve()
     try:
         proc = subprocess.run(
-            [sys.executable, str(script)],
-            cwd=str(lab_path),
+            [sys.executable, str(script_abs)],
+            cwd=str(cwd_abs),
             capture_output=True,
             text=True,
             timeout=effective_timeout,
