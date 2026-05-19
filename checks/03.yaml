@@ -1,0 +1,46 @@
+# Knowledge check for Lesson 3 — Examining Basic Data Types
+title: "Basic Data Types — Knowledge Check"
+
+mcq:
+  question: |
+    Python's idea of "truthiness" trips up CLI-trained engineers. Which of
+    these expressions evaluates to **`False`**?
+  options:
+    - "bool(0)"
+    - "bool(\"False\")"
+    - "bool(\"0\")"
+    - "bool([0])"
+  answer: 1
+  explain: |
+    Truthiness depends on **emptiness/zero-ness**, not the literal value.
+    The numeric zero, an empty string `""`, an empty list `[]`, `None`,
+    and `False` itself are the falsy values. Everything else is truthy —
+    including the string `"False"` (a non-empty string) and the list
+    `[0]` (a one-element list). This is a common bug source when
+    validating values you read from a router or a config file: an empty
+    field is falsy, but the string `"0"` is **not**.
+
+code_task:
+  prompt: |
+    `type(obj)` returns the class of any object — useful for runtime
+    checks and quick debugging. Three variables are pre-declared below.
+    Use `type()` to print the class of each on its own line so the
+    output is exactly:
+
+    ```
+    <class 'str'>
+    <class 'int'>
+    <class 'float'>
+    ```
+  starter: |
+    hostname = "R1"
+    port = 22
+    uptime_hours = 99.5
+    # TODO: print type(hostname), type(port), type(uptime_hours), one per line
+  expected_stdout_regex: "^<class 'str'>\\n<class 'int'>\\n<class 'float'>\\n?$"
+  hint: |
+    Three plain `print()` calls do it:
+
+        print(type(hostname))
+        print(type(port))
+        print(type(uptime_hours))
