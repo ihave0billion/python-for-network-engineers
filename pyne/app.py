@@ -8,6 +8,8 @@ from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
 from pyne.check_screen import CheckScreen
 from pyne.checks import CheckError, load_check
+from pyne.config import CMLConfig
+from pyne.lab_screen import LabScreen
 from pyne.lessons import Lesson
 from pyne.progress import load_progress, save_progress
 
@@ -26,11 +28,17 @@ class PyneApp(App):
         Binding("p", "prev_lesson", "Prev"),
         Binding("m", "toggle_complete", "Mark done"),
         Binding("c", "take_check", "Check"),
+        Binding("l", "open_lab", "Lab"),
     ]
 
-    def __init__(self, lessons: list[Lesson]) -> None:
+    def __init__(
+        self,
+        lessons: list[Lesson],
+        config: CMLConfig | None = None,
+    ) -> None:
         super().__init__()
         self.lessons = lessons
+        self.config = config
         self.progress = load_progress()
         self.current_index = self._resume_index()
 
@@ -130,6 +138,16 @@ class PyneApp(App):
             self.notify(f"Failed to load check: {exc}", severity="error")
             return
         self.push_screen(CheckScreen(lesson, check), self._after_check)
+
+    def action_open_lab(self) -> None:
+        lesson = self.lessons[self.current_index]
+        if lesson.lab_path is None:
+            self.notify(
+                f"No lab for lesson {lesson.number:02d}.",
+                severity="warning",
+            )
+            return
+        self.push_screen(LabScreen(lesson, self.config))
 
     def _after_check(self, passed: bool | None) -> None:
         if not passed:

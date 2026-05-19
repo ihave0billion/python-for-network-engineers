@@ -66,6 +66,7 @@ python -m pyne
 | `n` / `p` | Next / previous lesson |
 | `m` | Toggle lesson complete |
 | `c` | Open the knowledge check (if the lesson has one) |
+| `l` | Open the lab (if the lesson has one) |
 | `q` | Quit |
 
 Inside a knowledge check:
@@ -75,6 +76,13 @@ Inside a knowledge check:
 | `Ctrl+S` | Submit the MCQ + run the code task |
 | `Ctrl+H` | Show the hint |
 | `Esc` | Back to the lesson list (passes persist on exit) |
+
+Inside a lab:
+
+| Key | Action |
+|---|---|
+| `Ctrl+R` | Run the lab's primary script |
+| `Esc` | Back to the lesson list |
 
 ## Lab environment
 
