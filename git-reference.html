@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Git Quick Reference — Solo & Team Workflows</title>
+<style>
+  :root {
+    --bg:        #0A0F1C;
+    --card:      #141C2E;
+    --card-2:    #1A2238;
+    --border:    #2A3550;
+    --text:      #E8EBF0;
+    --muted:     #B0B7C8;
+    --dim:       #7E8AA3;
+    --accent:    #38BDF8;
+    --success:   #34D399;
+    --warning:   #FBBF24;
+    --danger:    #F87171;
+    --code-bg:   #0F1626;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", Menlo, Consolas, "SF Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+  /* ── Header ─────────────────────────────────────────────────── */
+  header { margin-bottom: 3.5rem; }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.75rem;
+    font-weight: 700;
+  }
+  .subtitle {
+    font-size: 1.125rem;
+    color: var(--muted);
+    margin: 0 0 1.5rem;
+    max-width: 60ch;
+  }
+
+  /* ── Table of contents ───────────────────────────────────────── */
+  nav.toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  nav.toc a {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.15s ease;
+  }
+  nav.toc a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ── Sections ───────────────────────────────────────────────── */
+  section { margin-top: 4rem; scroll-margin-top: 2rem; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .section-head .num {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-size: 0.95rem;
+  }
+  h2 {
+    font-size: 1.75rem;
+    letter-spacing: -0.01em;
+    margin: 0;
+    font-weight: 700;
+  }
+  .section-head + .lede {
+    color: var(--muted);
+    margin: 0.5rem 0 2rem;
+    max-width: 70ch;
+    font-size: 1.05rem;
+  }
+  .rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    align-self: center;
+    margin-left: 0.5rem;
+  }
+
+  /* ── Cards ──────────────────────────────────────────────────── */
+  .grid { display: grid; gap: 1rem; }
+  .grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .grid-4 { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .grid-5 { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.4rem;
+    transition: border-color 0.15s ease;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card-tight { padding: 1rem 1.15rem; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 4px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-right: 0.6rem;
+  }
+
+  .card h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.05rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+  }
+  .card p { margin: 0.3rem 0; color: var(--muted); font-size: 0.95rem; }
+  .card p.small { font-size: 0.85rem; color: var(--dim); font-style: italic; }
+  .card .why {
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px dashed var(--border);
+    font-size: 0.82rem;
+    color: var(--dim);
+  }
+
+  /* ── Code blocks ────────────────────────────────────────────── */
+  pre, code { font-family: var(--font-mono); }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    margin: 0.5rem 0;
+    color: var(--text);
+  }
+  code.inline {
+    background: var(--code-bg);
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-size: 0.85em;
+    color: var(--accent);
+    border: 1px solid var(--border);
+  }
+  .cmd-safe { color: var(--success); }
+  .cmd-warn { color: var(--warning); }
+  .cmd-danger { color: var(--danger); }
+  .cmd-flag { color: var(--dim); }
+  .cmd-comment { color: var(--dim); font-style: italic; }
+
+  /* ── Mental-model diagram ───────────────────────────────────── */
+  .diagram {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    display: flex;
+    justify-content: center;
+  }
+  .diagram svg { max-width: 100%; height: auto; }
+
+  /* ── Big concept chips ──────────────────────────────────────── */
+  .concept {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem 1.2rem;
+  }
+  .concept .term {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .concept .definition {
+    font-size: 1rem;
+    color: var(--text);
+    margin: 0.2rem 0 0.4rem;
+    font-weight: 600;
+  }
+  .concept .analogy {
+    font-size: 0.85rem;
+    color: var(--dim);
+    margin: 0;
+  }
+
+  /* ── Steps (numbered flow) ──────────────────────────────────── */
+  .steps { display: flex; flex-direction: column; gap: 0.85rem; }
+  .step {
+    display: grid;
+    grid-template-columns: 2.6rem 1fr;
+    gap: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.15rem;
+    align-items: start;
+  }
+  .step .num-circle {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: var(--code-bg);
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  .step h4 {
+    margin: 0 0 0.3rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .step p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+  .step pre { margin-top: 0.6rem; }
+
+  /* ── Callouts ───────────────────────────────────────────────── */
+  .callout {
+    border-left: 3px solid;
+    border-radius: 0 6px 6px 0;
+    padding: 0.85rem 1.1rem;
+    margin: 0.9rem 0;
+    background: var(--card);
+    font-size: 0.92rem;
+  }
+  .callout.info    { border-color: var(--accent); }
+  .callout.warn    { border-color: var(--warning); }
+  .callout.danger  { border-color: var(--danger); }
+  .callout strong { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.15em; }
+  .callout.info strong    { color: var(--accent); }
+  .callout.warn strong    { color: var(--warning); }
+  .callout.danger strong  { color: var(--danger); }
+  .callout p { margin: 0.3rem 0 0; color: var(--muted); }
+
+  /* ── Footer ─────────────────────────────────────────────────── */
+  footer {
+    margin-top: 5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--dim);
+    font-size: 0.85rem;
+    text-align: center;
+    font-family: var(--font-mono);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HEADER
+     ═══════════════════════════════════════════════════════════════ -->
+<header>
+  <p class="eyebrow">QUICK REFERENCE</p>
+  <h1>Git workflows.</h1>
+  <p class="subtitle">
+    A foundation for solo and team work. The first section is a
+    "what should I do next?" flowchart — when you forget the next step,
+    start there.
+  </p>
+  <nav class="toc">
+    <a href="#next">What should I do next?</a>
+    <a href="#concepts">5 core concepts</a>
+    <a href="#model">Mental model</a>
+    <a href="#solo">Solo workflow</a>
+    <a href="#team">Team workflow</a>
+    <a href="#cheat">Cheat sheet</a>
+    <a href="#oops">When things go wrong</a>
+  </nav>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     1. WHAT SHOULD I DO NEXT?   (decision tree)
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="next">
+  <div class="section-head">
+    <span class="num">00.</span>
+    <h2>What should I do next?</h2>
+    <span class="rule"></span>
+  </div>
+  <p class="lede">
+    Find the row that matches where you are. Run the commands underneath.
+    Replace <code class="inline">feature-name</code> with whatever
+    describes your chunk of work.
+  </p>
+
+  <div class="grid grid-2">
+
+    <!-- Scenario A -->
+    <div class="card">
+      <h3><span class="badge">A</span>I'm about to start something new</h3>
+      <p>Get to a clean copy of main, then branch off it.</p>
+<pre><span class="cmd-comment"># 1. switch to main and grab any new changes from GitHub</span>
+git checkout main
+git pull
+
+<span class="cmd-comment"># 2. create a new branch and switch to it in one step</span>
+git checkout <span class="cmd-flag">-b</span> feature-name
+
+<span class="cmd-comment"># 3. start editing your files</span></pre>
+      <div class="why">
+        Branches isolate your work. If you break something on the
+        branch, <code class="inline">main</code> is unaffected.
+      </div>
+    </div>
+
+    <!-- Scenario B -->
+    <div class="card">
+      <h3><span class="badge">B</span>I'm in the middle of working</h3>
+      <p>Save snapshots as you go. Each commit is a save point you can return to.</p>
+<pre><span class="cmd-comment"># at any time, see what's changed</span>
+git status
+
+<span class="cmd-comment"># save a snapshot of specific files</span>
+git add path/to/file.py another/file.md
+git commit <span class="cmd-flag">-m</span> "Short, specific message"
+
+<span class="cmd-comment"># back the branch up to GitHub (first push only needs -u)</span>
+git push <span class="cmd-flag">-u</span> origin feature-name
+<span class="cmd-comment"># subsequent pushes are just:</span>
+git push</pre>
+      <div class="why">
+        Commit often, push at least once a day. Each push is a backup
+        on GitHub even if your laptop dies.
+      </div>
+    </div>
+
+    <!-- Scenario C -->
+    <div class="card">
+      <h3><span class="badge">C</span>I'm done with this chunk (solo)</h3>
+      <p>Bring your branch into main. Two valid ways:</p>
+<pre><span class="cmd-comment"># Option 1 — merge locally, push main</span>
+git checkout main
+git pull
+git merge <span class="cmd-flag">--no-ff</span> feature-name
+git push origin main
+
+<span class="cmd-comment"># clean up: delete the branch you just merged</span>
+git branch <span class="cmd-flag">-d</span> feature-name
+git push origin <span class="cmd-flag">--delete</span> feature-name</pre>
+<pre><span class="cmd-comment"># Option 2 — open a pull request and merge in browser</span>
+git push <span class="cmd-flag">-u</span> origin feature-name   <span class="cmd-comment"># if not already pushed</span>
+gh pr create
+<span class="cmd-comment"># then click "Merge pull request" on github.com</span></pre>
+      <div class="why">
+        Both end in the same state. Option 2 gives you a written
+        record + a Merge button on GitHub. Either is fine when solo.
+      </div>
+    </div>
+
+    <!-- Scenario D -->
+    <div class="card">
+      <h3><span class="badge">D</span>Something went wrong</h3>
+      <p>Jump to <a href="#oops" style="color:var(--accent)">When things go wrong</a> for the full menu. Most common:</p>
+<pre><span class="cmd-comment"># I haven't committed yet, just want to throw it away</span>
+git restore .
+
+<span class="cmd-comment"># I just committed something I want to undo (keeps the changes)</span>
+git reset <span class="cmd-flag">--soft</span> HEAD~1
+
+<span class="cmd-comment"># I think I lost a commit — show me everything I've done recently</span>
+git reflog</pre>
+      <div class="why">
+        Git almost never truly deletes a commit. <code class="inline">git reflog</code>
+        is your "undo history" — it shows every move HEAD has made.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     2. CORE CONCEPTS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="concepts">
+  <div class="section-head">
+    <span class="num">01.</span>
+    <h2>Five concepts everything else builds on</h2>
+    <span class="rule"></span>
+  </div>
+  <p class="lede">
+    Learn these five and the rest of git is just commands that move
+    work between them.
+  </p>
+
+  <div class="grid grid-5">
+    <div class="concept">
+      <div class="term">Repository</div>
+      <div class="definition">A project tracked by git.</div>
+      <p class="analogy">"My folder of code, with a built-in time machine."</p>
+    </div>
+    <div class="concept">
+      <div class="term">Commit</div>
+      <div class="definition">A saved snapshot of files at one moment.</div>
+      <p class="analogy">"A photo of the project's state, with a message about what changed."</p>
+    </div>
+    <div class="concept">
+      <div class="term">Branch</div>
+      <div class="definition">A parallel line of commits.</div>
+      <p class="analogy">"A sandbox. I can break things here without touching main."</p>
+    </div>
+    <div class="concept">
+      <div class="term">Merge</div>
+      <div class="definition">Bringing one branch's changes into another.</div>
+      <p class="analogy">"Copy what I did in the sandbox back into the real project."</p>
+    </div>
+    <div class="concept">
+      <div class="term">Pull request</div>
+      <div class="definition">GitHub's UI for a merge — a webpage with a Merge button.</div>
+      <p class="analogy">"A page that says 'merge branch X into main' with a button to do it."</p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <strong>The "overriding" problem</strong>
+    <p>
+      Pushing only to <code class="inline">main</code> moves
+      <code class="inline">main</code> forward every time. If you
+      pushed an experiment, that's what GitHub now shows.
+      <strong>Branches fix this</strong> because your experiment lives
+      on the branch, not on <code class="inline">main</code>. You
+      decide when (and whether) the branch becomes the new
+      <code class="inline">main</code>.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     3. MENTAL MODEL — one picture
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="model">
+  <div class="section-head">
+    <span class="num">02.</span>
+    <h2>One picture</h2>
+    <span class="rule"></span>
+  </div>
+  <p class="lede">
+    Each dot is a commit. <code class="inline">main</code> sits at the
+    top. The branch peels off, does its own work, and merges back.
+  </p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 720 240" width="720" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, Menlo, Consolas, monospace" font-size="12">
+      <!-- main rail label -->
+      <text x="20" y="65" fill="#7E8AA3">main</text>
+      <text x="20" y="175" fill="#7E8AA3">feature</text>
+
+      <!-- main rail -->
+      <line x1="80" y1="60" x2="700" y2="60" stroke="#2A3550" stroke-width="2"/>
+      <!-- branch rail -->
+      <line x1="240" y1="170" x2="540" y2="170" stroke="#38BDF8" stroke-width="2"/>
+
+      <!-- diverge curve -->
+      <path d="M 180,60 C 200,60 220,170 240,170" fill="none" stroke="#38BDF8" stroke-width="2"/>
+      <!-- merge curve -->
+      <path d="M 540,170 C 560,170 580,60 600,60" fill="none" stroke="#34D399" stroke-width="2"/>
+
+      <!-- main commits -->
+      <circle cx="120" cy="60" r="7" fill="#E8EBF0"/>
+      <circle cx="180" cy="60" r="7" fill="#E8EBF0"/>
+      <circle cx="600" cy="60" r="9" fill="#34D399" stroke="#0A0F1C" stroke-width="2"/>
+      <text x="595" y="40" fill="#34D399" text-anchor="middle">merge</text>
+      <circle cx="660" cy="60" r="7" fill="#E8EBF0"/>
+
+      <!-- branch commits -->
+      <circle cx="290" cy="170" r="7" fill="#38BDF8"/>
+      <circle cx="370" cy="170" r="7" fill="#38BDF8"/>
+      <circle cx="450" cy="170" r="7" fill="#38BDF8"/>
+      <circle cx="530" cy="170" r="7" fill="#38BDF8"/>
+
+      <!-- captions -->
+      <text x="120" y="90" fill="#B0B7C8" text-anchor="middle">A</text>
+      <text x="180" y="90" fill="#B0B7C8" text-anchor="middle">B</text>
+      <text x="660" y="90" fill="#B0B7C8" text-anchor="middle">later</text>
+      <text x="290" y="195" fill="#B0B7C8" text-anchor="middle">work</text>
+      <text x="370" y="195" fill="#B0B7C8" text-anchor="middle">work</text>
+      <text x="450" y="195" fill="#B0B7C8" text-anchor="middle">work</text>
+      <text x="530" y="195" fill="#B0B7C8" text-anchor="middle">done</text>
+
+      <!-- annotations -->
+      <text x="210" y="125" fill="#38BDF8" text-anchor="middle" font-style="italic">git checkout -b feature</text>
+      <text x="575" y="125" fill="#34D399" text-anchor="middle" font-style="italic">git merge feature</text>
+    </svg>
+  </div>
+
+  <p class="lede" style="margin-top: 1rem;">
+    The blue line is the branch — main is untouched during the whole
+    middle section. Only at the green "merge" dot does the branch's
+    work enter main.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     4. SOLO WORKFLOW
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="solo">
+  <div class="section-head">
+    <span class="num">03.</span>
+    <h2>Solo workflow — the everyday loop</h2>
+    <span class="rule"></span>
+  </div>
+  <p class="lede">
+    For when you're the only person working on the repo. Do this every
+    time you start a new chunk of work.
+  </p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="num-circle">1</div>
+      <div>
+        <h4>Start clean from main</h4>
+        <p>Get the latest main from GitHub, then branch off it.</p>
+<pre>git checkout main
+git pull
+git checkout <span class="cmd-flag">-b</span> add-search-feature   <span class="cmd-comment"># or any descriptive name</span></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num-circle">2</div>
+      <div>
+        <h4>Edit + commit + push, repeat</h4>
+        <p>Save snapshots as you go. Each commit is a save point.</p>
+<pre>git status                      <span class="cmd-comment"># always free to run, shows the truth</span>
+git add path/to/changed-file
+git commit <span class="cmd-flag">-m</span> "Add search box to lesson list"
+git push <span class="cmd-flag">-u</span> origin add-search-feature  <span class="cmd-comment"># first push of the branch</span>
+git push                        <span class="cmd-comment"># subsequent pushes</span></pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num-circle">3</div>
+      <div>
+        <h4>When done, bring the branch into main</h4>
+        <p>Switch to main, merge the branch in, push the new main to GitHub.</p>
+<pre>git checkout main
+git pull                          <span class="cmd-comment"># pick up anything new (rare when solo, free safety)</span>
+git merge <span class="cmd-flag">--no-ff</span> add-search-feature   <span class="cmd-comment"># --no-ff keeps the branch visible in history</span>
+git push origin main</pre>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num-circle">4</div>
+      <div>
+        <h4>Clean up the branch</h4>
+        <p>The branch did its job. Delete it locally and on GitHub.</p>
+<pre>git branch <span class="cmd-flag">-d</span> add-search-feature
+git push origin <span class="cmd-flag">--delete</span> add-search-feature</pre>
+        <div class="why">
+          Old branches clutter the list. Deleting after merge is the
+          standard signal that the work has landed.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout info" style="margin-top: 1.5rem;">
+    <strong>Variation — PR-based solo</strong>
+    <p>
+      Same flow, but step 3 becomes:
+      <code class="inline">git push -u origin add-search-feature</code> →
+      <code class="inline">gh pr create</code> → click <em>Merge</em> on
+      GitHub. You get a written PR description and a merge commit on
+      <code class="inline">main</code> with no other behavioural change.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     5. TEAM WORKFLOW
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="team">
+  <div class="section-head">
+    <span class="num">04.</span>
+    <h2>Team workflow — what's different</h2>
+    <span class="rule"></span>
+  </div>
+  <p class="lede">
+    The branch / commit / merge model is identical. Three things are
+    added when others are pushing alongside you.
+  </p>
+
+  <div class="grid grid-3">
+    <div class="card">
+      <h3><span class="badge">+1</span>Pull before you start</h3>
+      <p>Always start from the latest main, because someone else may have merged since you last looked.</p>
+<pre>git checkout main
+git pull   <span class="cmd-comment"># pulls in your teammates' work</span>
+git checkout <span class="cmd-flag">-b</span> my-thing</pre>
+      <div class="why">
+        If you branch off stale main, you're working on yesterday's code.
+        Pull first, every time.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge">+2</span>PR instead of local merge</h3>
+      <p>Push your branch, open a PR, teammates review, then merge happens through the PR.</p>
+<pre>git push <span class="cmd-flag">-u</span> origin my-thing
+gh pr create   <span class="cmd-comment"># or open in browser</span>
+<span class="cmd-comment"># review comments → push more commits → reviewers approve</span>
+<span class="cmd-comment"># someone clicks "Merge"</span></pre>
+      <div class="why">
+        The PR is the conversation. Reviewers leave comments inline,
+        request changes, approve. The Merge button only lights up when
+        the team is happy.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="badge">+3</span>Update your branch with new main</h3>
+      <p>If main moves while your PR is open, sync the new main into your branch.</p>
+<pre>git checkout my-thing
+git fetch origin           <span class="cmd-comment"># grab latest, don't apply yet</span>
+git merge origin/main      <span class="cmd-comment"># bring new main into your branch</span>
+<span class="cmd-comment"># resolve conflicts if any, commit, push</span></pre>
+      <div class="why">
+        Reviewers want to merge code that already works with current main.
+        If main moves under you, sync once before they re-review.
+      </div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <strong>Merge conflicts</strong>
+    <p>
+      When two people change the same lines, git can't pick a winner.
+      Run <code class="inline">git status</code> to see which files conflict,
+      open each one, find the
+      <code class="inline">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> markers, edit to
+      the version you want, save, then
+      <code class="inline">git add &lt;file&gt; &amp;&amp; git commit</code>.
+      Don't be afraid of conflicts — they're how git asks "which version is right?"
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     6. CHEAT SHEET — grouped by intent
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="cheat">
+  <div class="section-head">
+    <span class="num">05.</span>
+    <h2>Cheat sheet — by intent</h2>
+    <span class="rule"></span>
+  </div>
+  <p class="lede">
+    Group commands by what you're trying to do. Scan the headings, not
+    the man pages.
+  </p>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <h3>See what's going on</h3>
+<pre>git status              <span class="cmd-comment"># changed files, branch, ahead/behind</span>
+git log <span class="cmd-flag">--oneline -10</span>    <span class="cmd-comment"># last 10 commits, one per line</span>
+git diff                <span class="cmd-comment"># uncommitted changes (working tree)</span>
+git diff <span class="cmd-flag">--staged</span>         <span class="cmd-comment"># what add'ed but not yet committed</span>
+git branch              <span class="cmd-comment"># list local branches, * = current</span></pre>
+    </div>
+
+    <div class="card">
+      <h3>Start new work</h3>
+<pre>git checkout main
+git pull
+git checkout <span class="cmd-flag">-b</span> name    <span class="cmd-comment"># create and switch in one step</span>
+git switch <span class="cmd-flag">-c</span> name      <span class="cmd-comment"># modern alias for the same thing</span></pre>
+    </div>
+
+    <div class="card">
+      <h3>Save progress</h3>
+<pre>git add &lt;file&gt;          <span class="cmd-comment"># stage specific files</span>
+git add <span class="cmd-flag">-p</span>                <span class="cmd-comment"># stage in chunks, interactively</span>
+git commit <span class="cmd-flag">-m</span> "msg"      <span class="cmd-comment"># save snapshot with message</span>
+git push                <span class="cmd-comment"># back it up to GitHub</span>
+git push <span class="cmd-flag">-u</span> origin name <span class="cmd-comment"># first push of a new branch</span></pre>
+    </div>
+
+    <div class="card">
+      <h3>Sync with GitHub</h3>
+<pre>git pull                <span class="cmd-comment"># fetch + merge (most common)</span>
+git fetch               <span class="cmd-comment"># fetch only, don't apply yet</span>
+git pull <span class="cmd-flag">--rebase</span>         <span class="cmd-comment"># replay your commits on top of remote</span></pre>
+    </div>
+
+    <div class="card">
+      <h3>Finish work — solo, local merge</h3>
+<pre>git checkout main
+git pull
+git merge <span class="cmd-flag">--no-ff</span> name
+git push origin main
+git branch <span class="cmd-flag">-d</span> name
+git push origin <span class="cmd-flag">--delete</span> name</pre>
+    </div>
+
+    <div class="card">
+      <h3>Finish work — pull request</h3>
+<pre>git push <span class="cmd-flag">-u</span> origin name
+gh pr create            <span class="cmd-comment"># or open github.com in browser</span>
+<span class="cmd-comment"># click Merge on the PR page</span>
+git checkout main
+git pull                <span class="cmd-comment"># pull the merged main locally</span>
+git branch <span class="cmd-flag">-d</span> name      <span class="cmd-comment"># local cleanup</span></pre>
+    </div>
+
+    <div class="card">
+      <h3>Move between branches</h3>
+<pre>git checkout main       <span class="cmd-comment"># switch to main</span>
+git checkout name       <span class="cmd-comment"># switch to existing branch</span>
+git switch name         <span class="cmd-comment"># modern alias</span>
+git branch              <span class="cmd-comment"># list to remember names</span></pre>
+    </div>
+
+    <div class="card">
+      <h3>Inspect the past</h3>
+<pre>git log <span class="cmd-flag">--oneline</span> <span class="cmd-flag">--graph</span> <span class="cmd-flag">--all</span>  <span class="cmd-comment"># tree of all branches</span>
+git show &lt;commit-sha&gt;          <span class="cmd-comment"># full diff of one commit</span>
+git blame &lt;file&gt;               <span class="cmd-comment"># who last changed each line</span>
+git reflog                     <span class="cmd-comment"># every move HEAD has made</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     7. WHEN THINGS GO WRONG
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="oops">
+  <div class="section-head">
+    <span class="num">06.</span>
+    <h2>When things go wrong</h2>
+    <span class="rule"></span>
+  </div>
+  <p class="lede">
+    Find the situation that matches yours. The recovery commands are
+    safe (green), worth pausing on (amber), or destructive
+    (red — back up first).
+  </p>
+
+  <div class="grid grid-2">
+
+    <div class="card">
+      <h3>I haven't committed and want to throw away changes</h3>
+<pre><span class="cmd-safe">git restore .</span>           <span class="cmd-comment"># discard all uncommitted changes</span>
+<span class="cmd-safe">git restore &lt;file&gt;</span>      <span class="cmd-comment"># discard one file's changes</span></pre>
+      <div class="why">Safe. Only touches uncommitted changes. Already-committed work is untouched.</div>
+    </div>
+
+    <div class="card">
+      <h3>I just committed something I want to undo</h3>
+<pre><span class="cmd-warn">git reset <span class="cmd-flag">--soft</span> HEAD~1</span>   <span class="cmd-comment"># undo commit, keep changes staged</span>
+<span class="cmd-warn">git reset HEAD~1</span>          <span class="cmd-comment"># undo commit, keep changes unstaged</span></pre>
+      <div class="why">Only do this if you haven't pushed yet. The commit is gone from the branch but your edits remain.</div>
+    </div>
+
+    <div class="card">
+      <h3>I committed to the wrong branch</h3>
+<pre><span class="cmd-safe">git log <span class="cmd-flag">--oneline -5</span></span>     <span class="cmd-comment"># find the commit's sha</span>
+<span class="cmd-safe">git checkout right-branch</span>
+<span class="cmd-safe">git cherry-pick &lt;sha&gt;</span>     <span class="cmd-comment"># copy that commit here</span>
+<span class="cmd-warn">git checkout wrong-branch</span>
+<span class="cmd-warn">git reset <span class="cmd-flag">--hard</span> HEAD~1</span>   <span class="cmd-comment"># remove it from wrong branch (DESTRUCTIVE)</span></pre>
+      <div class="why">Only use <code class="inline">--hard</code> when you've confirmed the commit is safely on the other branch.</div>
+    </div>
+
+    <div class="card">
+      <h3>I have unsaved work and need to switch branches</h3>
+<pre><span class="cmd-safe">git stash</span>                <span class="cmd-comment"># tuck changes away</span>
+git checkout other-branch
+<span class="cmd-comment"># do whatever</span>
+git checkout original-branch
+<span class="cmd-safe">git stash pop</span>            <span class="cmd-comment"># bring changes back</span></pre>
+      <div class="why">Stash is a shelf. Things you put there come back exactly how they were.</div>
+    </div>
+
+    <div class="card">
+      <h3>I think I lost a commit</h3>
+<pre><span class="cmd-safe">git reflog</span>               <span class="cmd-comment"># every HEAD move, with sha</span>
+<span class="cmd-safe">git checkout &lt;sha&gt;</span>        <span class="cmd-comment"># visit the "lost" state</span>
+<span class="cmd-safe">git branch rescue &lt;sha&gt;</span>   <span class="cmd-comment"># save it as a new branch</span></pre>
+      <div class="why">Git almost never deletes commits. Reflog is your safety net. Anything that was ever on HEAD is recoverable for ~90 days.</div>
+    </div>
+
+    <div class="card">
+      <h3>I have merge conflicts</h3>
+<pre><span class="cmd-safe">git status</span>               <span class="cmd-comment"># lists conflicted files</span>
+<span class="cmd-comment"># open each file, find:</span>
+<span class="cmd-comment">#   &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span>
+<span class="cmd-comment">#   your version</span>
+<span class="cmd-comment">#   =======</span>
+<span class="cmd-comment">#   their version</span>
+<span class="cmd-comment">#   &gt;&gt;&gt;&gt;&gt;&gt;&gt; branch-name</span>
+<span class="cmd-comment"># edit to the right version, remove markers, save</span>
+<span class="cmd-safe">git add &lt;file&gt;</span>
+<span class="cmd-safe">git commit</span>               <span class="cmd-comment"># or git merge --continue</span></pre>
+      <div class="why">Conflicts are a question, not an error. Git is asking "which version do you want?"</div>
+    </div>
+
+    <div class="card">
+      <h3>I pushed something I shouldn't have</h3>
+<pre><span class="cmd-warn">git revert &lt;sha&gt;</span>          <span class="cmd-comment"># make a NEW commit that undoes the bad one</span>
+git push</pre>
+      <div class="why">Revert is the right tool for "I pushed it, undo it" because it doesn't rewrite history — it adds an opposite commit. Safe even after sharing.</div>
+    </div>
+
+    <div class="card">
+      <h3>Nuclear option — start over from GitHub</h3>
+<pre><span class="cmd-danger">git fetch origin</span>
+<span class="cmd-danger">git reset <span class="cmd-flag">--hard</span> origin/main</span>   <span class="cmd-comment"># wipes ALL local changes</span></pre>
+      <div class="why">Throws away everything local on this branch and forces it to match GitHub. Use only when you're sure nothing local is worth keeping.</div>
+    </div>
+
+  </div>
+
+  <div class="callout danger" style="margin-top: 1.5rem;">
+    <strong>Three commands that rewrite history — use with care</strong>
+    <p>
+      <code class="inline">git reset --hard</code>,
+      <code class="inline">git push --force</code>,
+      and <code class="inline">git rebase</code> can permanently lose work
+      or break collaborators. Before running any of them on a branch
+      others see, ask: "Did anyone else pull this?" If yes, prefer
+      <code class="inline">git revert</code> instead.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════════════════════ -->
+<footer>
+  Save this file. Re-open whenever you forget the next step.
+  <br>
+  When in doubt → <code style="color:var(--accent)">git status</code>.
+</footer>
+
+</div>
+</body>
+</html>
