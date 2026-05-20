@@ -4,7 +4,9 @@ An interactive terminal app that teaches Python to Cisco network engineers,
 one short lesson at a time. Built on the *Programming for Network Engineers
 (PRNE 2.0)* learning path with a CLI-to-data-oriented mindset.
 
-> **Status:** early development. Single-user today; designed for sharing later.
+> **Status:** v0.1.0 alpha. Every lesson is gradeable and every lesson has a
+> runnable lab. See [CHANGELOG.md](CHANGELOG.md) for what's in this release
+> and what's slated for v0.2.
 
 ## What's inside
 
@@ -18,6 +20,7 @@ one short lesson at a time. Built on the *Programming for Network Engineers
 | `teach-me-python.md` | Course design philosophy / meta-prompt |
 | `Python for Network Engineer notes.pdf` | Source reference notes |
 | `GITHUB_SETUP.md` | First-time GitHub publishing guide |
+| `CHANGELOG.md` | Release notes — see for what's in v0.1.0 |
 
 ## Course modules
 
@@ -83,6 +86,17 @@ Inside a lab:
 |---|---|
 | `Ctrl+R` | Run the lab's primary script |
 | `Esc` | Back to the lesson list |
+
+## Running the test suite
+
+```bash
+pip install -e ".[dev]"
+pytest -q
+```
+
+50 tests across `pyne.checks`, `pyne.lab_runner`, `pyne.lessons`,
+`pyne.progress`, and `pyne.config`. TUI screens are currently
+smoke-tested by hand.
 
 ## Lab environment
 
