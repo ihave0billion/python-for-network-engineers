@@ -1,0 +1,43 @@
+# Knowledge check for Lesson 10 — Regular Expressions Intro
+title: "Regex Intro — Knowledge Check"
+
+mcq:
+  question: |
+    What does `re.search(pattern, text)` return when **no match** is
+    found in `text`?
+  options:
+    - 'An empty string `""`'
+    - "An empty list `[]`"
+    - "`None`"
+    - "`False`"
+  answer: 3
+  explain: |
+    `re.search` returns a **Match object** on success and **`None`** on
+    failure. `re.findall` is the one that returns a list (possibly
+    empty). Treating `re.search`'s return value as truthy works
+    (`if re.search(...):`), but indexing into it like a list before
+    checking for `None` causes `AttributeError: 'NoneType' object has
+    no attribute 'group'`.
+
+code_task:
+  prompt: |
+    A multi-line snippet of `show interface` output is pre-declared.
+    Use `re.findall` to extract each interface name (e.g.
+    `GigabitEthernet1/0`), and print them one per line so the output
+    is exactly:
+
+    ```
+    GigabitEthernet1/0
+    GigabitEthernet2/0
+    GigabitEthernet3/0
+    ```
+  starter: |
+    import re
+    output = "GigabitEthernet1/0 is up\nGigabitEthernet2/0 is down\nGigabitEthernet3/0 is up\n"
+    # TODO: re.findall the interface names, then print each on its own line
+  expected_stdout_regex: "^GigabitEthernet1/0\\nGigabitEthernet2/0\\nGigabitEthernet3/0\\n?$"
+  hint: |
+    `\d` matches a digit; the slash is literal:
+
+        for iface in re.findall(r"GigabitEthernet\d/\d", output):
+            print(iface)

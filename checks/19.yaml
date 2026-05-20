@@ -1,0 +1,23 @@
+# Knowledge check for Lesson 19 — Python pdb
+title: "Python pdb — Knowledge Check"
+
+# MCQ-only check: pdb is interactive, so its commands can't be exercised
+# usefully through a stdout regex.
+
+mcq:
+  question: |
+    Since Python 3.7, what's the most concise way to drop into pdb at
+    a specific line in your code?
+  options:
+    - "`import pdb; pdb.set_trace()` — still works, but verbose."
+    - "Add `breakpoint()` to that line."
+    - "Run the script with `python -d script.py`."
+    - "Call `pdb.run('script.py')` from the REPL."
+  answer: 2
+  explain: |
+    `breakpoint()` is a built-in added in Python 3.7. By default it
+    calls `pdb.set_trace()`, but it honors the `PYTHONBREAKPOINT`
+    environment variable — so a team can swap in `ipdb`, a web-based
+    debugger, or disable breakpoints entirely (`PYTHONBREAKPOINT=0`)
+    without editing source. The `pdb.set_trace()` form still works
+    and is what you'll see in older code.

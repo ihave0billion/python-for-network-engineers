@@ -1,0 +1,46 @@
+# Knowledge check for Lesson 8 — Reading and Writing Text/CSV Files
+title: "Text and CSV Files — Knowledge Check"
+
+mcq:
+  question: |
+    Why is `with open(path, "r") as f:` preferred over `f = open(path, "r")`
+    followed by a manual `f.close()` later in the script?
+  options:
+    - "`with` opens the file in append mode by default."
+    - "`with` auto-closes the file when the block exits, even if an exception is raised."
+    - "`with` is faster for files larger than 1 MB."
+    - "`with` encrypts the file's contents at rest."
+  answer: 2
+  explain: |
+    `with` invokes Python's context-manager protocol — the file is
+    closed automatically on block exit, exception or not. Forgetting
+    to close files leaves them open until garbage collection (or until
+    the OS reclaims them), which leaks file descriptors in long-running
+    automation scripts that touch thousands of files.
+
+code_task:
+  prompt: |
+    Two device names are pre-declared. Write them — one per line — to
+    a file in the system temp directory using a `with open(...)` block,
+    then read the file back and print its contents so the output is
+    exactly:
+
+    ```
+    R1
+    R2
+    ```
+  starter: |
+    import os, tempfile
+    devices = ["R1", "R2"]
+    path = os.path.join(tempfile.gettempdir(), "pyne_check_08.txt")
+    # TODO: write devices to `path` (one per line), then read and print.
+  expected_stdout_regex: "^R1\\nR2\\n*$"
+  hint: |
+    Two `with` blocks — one to write, one to read. Use `end=""` on the
+    print so you don't add a stray trailing newline:
+
+        with open(path, "w") as f:
+            for d in devices:
+                f.write(d + "\n")
+        with open(path) as f:
+            print(f.read(), end="")

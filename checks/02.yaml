@@ -1,0 +1,41 @@
+# Knowledge check for Lesson 2 — Scripting with Python, PEP, and Getting Help
+title: "Scripting, PEP 8, and Help — Knowledge Check"
+
+mcq:
+  question: |
+    You're storing a router's management IP in a Python script. Which
+    variable name follows **PEP 8** style for variables?
+  options:
+    - "RouterIP = '10.0.0.1'"
+    - "router_ip = '10.0.0.1'"
+    - "routerIP = '10.0.0.1'"
+    - "router-ip = '10.0.0.1'"
+  answer: 2
+  explain: |
+    PEP 8 uses `snake_case` for variables and functions, `CamelCase` for
+    classes, and `UPPER_SNAKE_CASE` for module-level constants. `routerIP`
+    is `camelCase` (Java/JS habit), `RouterIP` looks like a class, and
+    `router-ip` isn't a legal Python identifier at all — the hyphen is
+    parsed as the subtraction operator.
+
+code_task:
+  prompt: |
+    The two variables below are already named in PEP-8-compliant snake_case.
+    Use them — without changing their names — to print exactly this single
+    line:
+
+    ```
+    R1 has port 22
+    ```
+  starter: |
+    hostname = "R1"
+    port = 22
+    # TODO: print "R1 has port 22"
+  expected_stdout_regex: "^R1 has port 22\\n?$"
+  hint: |
+    `print()` takes multiple positional arguments and joins them with a
+    space by default:
+
+        print(hostname, "has port", port)
+
+    An f-string also works: `print(f"{hostname} has port {port}")`.

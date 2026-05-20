@@ -1,0 +1,36 @@
+# Knowledge check for Lesson 14 — Python Modules and Packages
+title: "Modules and Packages — Knowledge Check"
+
+mcq:
+  question: |
+    Which import statement lets you reference the `datetime` module as
+    `dt` for the rest of your file?
+  options:
+    - "import datetime.dt"
+    - "from datetime import dt"
+    - "import datetime as dt"
+    - "dt = datetime"
+  answer: 3
+  explain: |
+    `import X as Y` rebinds the imported module to an alias. Common
+    examples you'll see across Python automation: `import pandas as pd`,
+    `import numpy as np`, `import netmiko as nm`. The `from X import Y`
+    form brings in a specific *name* from the module, not the whole
+    module — so `from datetime import dt` would only work if `dt` were
+    a real attribute of the `datetime` module (it isn't).
+
+code_task:
+  prompt: |
+    A file path that might appear in a backup script is pre-declared.
+    Use `os.path.basename` to print just the filename portion. The
+    output must be exactly `show_version_R1.txt`.
+  starter: |
+    import os
+    path = "/var/log/cisco/show_version_R1.txt"
+    # TODO: print just the filename portion of `path`
+  expected_stdout_regex: "^show_version_R1\\.txt\\n?$"
+  hint: |
+    `os.path.basename` strips the directory and returns the trailing
+    component:
+
+        print(os.path.basename(path))

@@ -1,0 +1,35 @@
+# Knowledge check for Lesson 6 — Conditionals and Operators
+title: "Conditionals and Operators — Knowledge Check"
+
+mcq:
+  question: |
+    You have a list of routers and want to check whether `"R1"` is in it.
+    Which line uses the correct operator?
+  options:
+    - 'if "R1" = routers:'
+    - 'if "R1" == routers:'
+    - 'if "R1" in routers:'
+    - 'if "R1" is routers:'
+  answer: 3
+  explain: |
+    `in` is the **membership** operator — it tests whether a value
+    appears in a container. `=` is *assignment* (would be a SyntaxError
+    inside `if`). `==` is *equality* — it'd compare the string `"R1"`
+    against the entire list (always False). `is` checks *identity*
+    (same object in memory), not membership.
+
+code_task:
+  prompt: |
+    An interface admin status is pre-declared. Print exactly `up` if the
+    status is the string `"up"`, otherwise print exactly `down`.
+  starter: |
+    admin_status = "down"
+    # TODO: print "up" if admin_status == "up", else print "down"
+  expected_stdout_regex: "^down\\n?$"
+  hint: |
+    Standard if/else, comparing with `==`:
+
+        if admin_status == "up":
+            print("up")
+        else:
+            print("down")

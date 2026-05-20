@@ -1,0 +1,42 @@
+# Knowledge check for Lesson 1 — Your First Python Program
+title: "Your First Python Program — Knowledge Check"
+
+mcq:
+  question: |
+    Inside a Python script you need to store the management IP of a router
+    so you can use it on later lines. Which line does that?
+  options:
+    - "ip == '10.0.0.1'"
+    - "var ip = '10.0.0.1'"
+    - "ip = '10.0.0.1'"
+    - "let ip = '10.0.0.1'"
+  answer: 3
+  explain: |
+    A single `=` is *assignment* — it binds the name `ip` to the string
+    `'10.0.0.1'`. `==` is *comparison* (used in conditionals). Python has
+    no `var` or `let` keyword; you just write the name and assign to it.
+
+code_task:
+  prompt: |
+    A first-pass network script almost always looks the same: a few
+    variables at the top holding device data, then code at the bottom
+    that does something with them.
+
+    Two variables are already declared for you below. Print the hostname
+    on its own line, then the version on its own line, so the output is
+    exactly:
+
+    ```
+    R1
+    17.6.1
+    ```
+  starter: |
+    hostname = "R1"
+    version = "17.6.1"
+    # TODO: print hostname, then version, each on its own line
+  expected_stdout_regex: "^R1\\n17\\.6\\.1\\n?$"
+  hint: |
+    Two `print()` calls — one per variable:
+
+        print(hostname)
+        print(version)

@@ -4,7 +4,9 @@ An interactive terminal app that teaches Python to Cisco network engineers,
 one short lesson at a time. Built on the *Programming for Network Engineers
 (PRNE 2.0)* learning path with a CLI-to-data-oriented mindset.
 
-> **Status:** early development. Single-user today; designed for sharing later.
+> **Status:** v0.1.0 alpha. Every lesson is gradeable and every lesson has a
+> runnable lab. See [CHANGELOG.md](CHANGELOG.md) for what's in this release
+> and what's slated for v0.2.
 
 ## What's inside
 
@@ -12,11 +14,13 @@ one short lesson at a time. Built on the *Programming for Network Engineers
 |---|---|
 | `lessons/` | Short markdown lessons (one concept each) — modules 1–8 |
 | `labs/` | Runnable Python lab files paired with each lesson |
-| `checks/` | Per-lesson knowledge-check definitions (MCQ + code task) — *coming soon* |
-| `pyne/` | Textual TUI app source — *coming soon* |
+| `checks/` | Per-lesson knowledge-check definitions (MCQ + code task) |
+| `pyne/` | Textual TUI app source |
+| `tests/` | Pytest suite for the app internals |
 | `teach-me-python.md` | Course design philosophy / meta-prompt |
 | `Python for Network Engineer notes.pdf` | Source reference notes |
 | `GITHUB_SETUP.md` | First-time GitHub publishing guide |
+| `CHANGELOG.md` | Release notes — see for what's in v0.1.0 |
 
 ## Course modules
 
@@ -54,9 +58,45 @@ pip install -e .              # once pyproject.toml lands
 cp config.example.yaml config.yaml
 $EDITOR config.yaml           # fill in your router IPs, username, password
 
-# 4. Run the app (coming soon)
+# 4. Run the app
 python -m pyne
 ```
+
+## App keybindings
+
+| Key | Action |
+|---|---|
+| `n` / `p` | Next / previous lesson |
+| `m` | Toggle lesson complete |
+| `c` | Open the knowledge check (if the lesson has one) |
+| `l` | Open the lab (if the lesson has one) |
+| `q` | Quit |
+
+Inside a knowledge check:
+
+| Key | Action |
+|---|---|
+| `Ctrl+S` | Submit the MCQ + run the code task |
+| `Ctrl+H` | Show the hint |
+| `Esc` | Back to the lesson list (passes persist on exit) |
+
+Inside a lab:
+
+| Key | Action |
+|---|---|
+| `Ctrl+R` | Run the lab's primary script |
+| `Esc` | Back to the lesson list |
+
+## Running the test suite
+
+```bash
+pip install -e ".[dev]"
+pytest -q
+```
+
+50 tests across `pyne.checks`, `pyne.lab_runner`, `pyne.lessons`,
+`pyne.progress`, and `pyne.config`. TUI screens are currently
+smoke-tested by hand.
 
 ## Lab environment
 

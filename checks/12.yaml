@@ -1,0 +1,41 @@
+# Knowledge check for Lesson 12 — Functions, Namespaces, and main
+title: "Functions and __main__ — Knowledge Check"
+
+mcq:
+  question: |
+    You run `python my_script.py` from the terminal. Inside
+    `my_script.py`, what is the value of the special variable
+    `__name__`?
+  options:
+    - '"my_script"'
+    - '"__main__"'
+    - "`None`"
+    - "The script's full file path"
+  answer: 2
+  explain: |
+    When a `.py` file is run **directly**, Python sets `__name__` to
+    the literal string `"__main__"`. When the same file is **imported**
+    as a module from somewhere else, `__name__` becomes the module's
+    name (e.g., `"my_script"`). The
+    `if __name__ == "__main__":` idiom lets a file act as both an
+    importable library and a runnable script — your helper functions
+    are reusable, and the side-effect code only fires when invoked
+    directly.
+
+code_task:
+  prompt: |
+    A function `get_hostname()` is pre-declared. Add an
+    `if __name__ == "__main__":` guard that calls it and prints the
+    result. The output must be exactly `R1`.
+  starter: |
+    def get_hostname():
+        """Return a hostname string."""
+        return "R1"
+
+    # TODO: under an `if __name__ == "__main__":` guard, print get_hostname()
+  expected_stdout_regex: "^R1\\n?$"
+  hint: |
+    Indent the print under the guard:
+
+        if __name__ == "__main__":
+            print(get_hostname())

@@ -15,6 +15,7 @@ def _repo_root() -> Path:
 
 def main() -> int:
     from pyne.app import PyneApp
+    from pyne.config import load_config
     from pyne.lessons import discover_lessons
 
     repo_root = _repo_root()
@@ -26,7 +27,8 @@ def main() -> int:
             file=sys.stderr,
         )
         return 1
-    PyneApp(lessons=lessons).run()
+    config = load_config(repo_root)
+    PyneApp(lessons=lessons, config=config).run()
     return 0
 
 

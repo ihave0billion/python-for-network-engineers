@@ -27,5 +27,6 @@ Lists of lists, dicts of lists, etc. Navigate with chained indexing/keys:
 `net[2]["device"]["interface"]`.
 
 ## Lab
-See `labs/04_complex_data_types/` for `lists.py`, `tuples.py`, `sets.py`,
-`dictionaries.py`.
+See `labs/04_collections/` for `lists.py` and `tuples.py`. Set and
+dict examples are introduced inline in the lesson above; standalone
+lab scripts for those are planned.

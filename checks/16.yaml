@@ -1,0 +1,37 @@
+# Knowledge check for Lesson 16 — Inputs from the Command Line
+title: "Command-Line Arguments — Knowledge Check"
+
+mcq:
+  question: |
+    Compared to reading `sys.argv` yourself, what does `argparse` give
+    you for free?
+  options:
+    - "Faster script startup time."
+    - "Automatic `--help`, type conversion, and validation of required arguments."
+    - "A graphical UI for picking arguments."
+    - "Encrypted command-line arguments."
+  answer: 2
+  explain: |
+    `argparse` knows your flags, their expected types (`type=int`),
+    which are required, and what to print for `--help`. It also gives
+    clean error messages when the user gets something wrong. `sys.argv`
+    is just a list of strings — fine for two-line scripts, painful
+    once your tool grows past three options.
+
+code_task:
+  prompt: |
+    Build an `argparse` parser with one optional argument `--router`.
+    Then call `parser.parse_args(["--router", "R1"])` (passing the arg
+    list explicitly, so the check doesn't depend on real `sys.argv`)
+    and print the parsed router name. The output must be `R1`.
+  starter: |
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--router")
+    # TODO: parse the list ["--router", "R1"] and print args.router
+  expected_stdout_regex: "^R1\\n?$"
+  hint: |
+    `parse_args` accepts an explicit list of strings — handy for tests:
+
+        args = parser.parse_args(["--router", "R1"])
+        print(args.router)

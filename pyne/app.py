@@ -6,6 +6,10 @@ from textual.binding import Binding
 from textual.containers import Horizontal
 from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
+from pyne.check_screen import CheckScreen
+from pyne.checks import CheckError, load_check
+from pyne.config import CMLConfig
+from pyne.lab_screen import LabScreen
 from pyne.lessons import Lesson
 from pyne.progress import load_progress, save_progress
 
@@ -23,11 +27,18 @@ class PyneApp(App):
         Binding("n", "next_lesson", "Next"),
         Binding("p", "prev_lesson", "Prev"),
         Binding("m", "toggle_complete", "Mark done"),
+        Binding("c", "take_check", "Check"),
+        Binding("l", "open_lab", "Lab"),
     ]
 
-    def __init__(self, lessons: list[Lesson]) -> None:
+    def __init__(
+        self,
+        lessons: list[Lesson],
+        config: CMLConfig | None = None,
+    ) -> None:
         super().__init__()
         self.lessons = lessons
+        self.config = config
         self.progress = load_progress()
         self.current_index = self._resume_index()
 
@@ -39,9 +50,22 @@ class PyneApp(App):
                 return i
         return 0
 
+    def _marker_for(self, lesson: Lesson) -> str:
+        if lesson.number in self.progress.passed_checks:
+            return "★"
+        if lesson.number in self.progress.completed:
+            return "✓"
+        return " "
+
     def _list_item(self, lesson: Lesson) -> ListItem:
-        marker = "✓" if lesson.number in self.progress.completed else " "
+        marker = self._marker_for(lesson)
         return ListItem(Label(f"[{marker}] {lesson.number:02d}  {lesson.display_title}"))
+
+    def _sub_title(self) -> str:
+        return (
+            f"{len(self.progress.completed)}/{len(self.lessons)} done · "
+            f"{len(self.progress.passed_checks)} checks passed"
+        )
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -55,7 +79,7 @@ class PyneApp(App):
 
     def on_mount(self) -> None:
         self.title = "pyne — Python for Network Engineers"
-        self.sub_title = f"{len(self.progress.completed)}/{len(self.lessons)} complete"
+        self.sub_title = self._sub_title()
         list_view = self.query_one(ListView)
         list_view.index = self.current_index
         list_view.focus()
@@ -91,13 +115,50 @@ class PyneApp(App):
         lesson = self.lessons[self.current_index]
         if lesson.number in self.progress.completed:
             self.progress.completed.remove(lesson.number)
+            self.progress.passed_checks.discard(lesson.number)
             self.notify(f"Lesson {lesson.number:02d} marked incomplete.")
         else:
             self.progress.completed.add(lesson.number)
             self.notify(f"Lesson {lesson.number:02d} marked complete.")
         save_progress(self.progress)
         self._rebuild_list()
-        self.sub_title = f"{len(self.progress.completed)}/{len(self.lessons)} complete"
+        self.sub_title = self._sub_title()
+
+    def action_take_check(self) -> None:
+        lesson = self.lessons[self.current_index]
+        if lesson.check_path is None:
+            self.notify(
+                f"No knowledge check for lesson {lesson.number:02d}.",
+                severity="warning",
+            )
+            return
+        try:
+            check = load_check(lesson.check_path)
+        except CheckError as exc:
+            self.notify(f"Failed to load check: {exc}", severity="error")
+            return
+        self.push_screen(CheckScreen(lesson, check), self._after_check)
+
+    def action_open_lab(self) -> None:
+        lesson = self.lessons[self.current_index]
+        if lesson.lab_path is None:
+            self.notify(
+                f"No lab for lesson {lesson.number:02d}.",
+                severity="warning",
+            )
+            return
+        self.push_screen(LabScreen(lesson, self.config))
+
+    def _after_check(self, passed: bool | None) -> None:
+        if not passed:
+            return
+        lesson = self.lessons[self.current_index]
+        self.progress.completed.add(lesson.number)
+        self.progress.passed_checks.add(lesson.number)
+        save_progress(self.progress)
+        self._rebuild_list()
+        self.sub_title = self._sub_title()
+        self.notify(f"Lesson {lesson.number:02d} check passed — nicely done.")
 
     def _rebuild_list(self) -> None:
         list_view = self.query_one(ListView)

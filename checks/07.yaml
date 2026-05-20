@@ -1,0 +1,38 @@
+# Knowledge check for Lesson 7 — For and While Loops
+title: "Loops — Knowledge Check"
+
+mcq:
+  question: |
+    What does `list(range(1, 4))` evaluate to?
+  options:
+    - "[0, 1, 2, 3]"
+    - "[1, 2, 3, 4]"
+    - "[1, 2, 3]"
+    - "[1, 4]"
+  answer: 3
+  explain: |
+    `range(start, stop)` is **half-open**: it includes `start` and
+    excludes `stop`. So `range(1, 4)` yields 1, 2, 3 — not 4. This
+    off-by-one is the source of countless "why is my last router
+    missing?" bugs. To iterate routers 1..N inclusive, write
+    `range(1, N + 1)`.
+
+code_task:
+  prompt: |
+    Print the loopback IPs for routers R1 through R4, one per line,
+    so the output is exactly:
+
+    ```
+    192.168.1.1
+    192.168.1.2
+    192.168.1.3
+    192.168.1.4
+    ```
+  starter: |
+    # TODO: use range() to print 192.168.1.<n> for n in 1..4
+  expected_stdout_regex: "^192\\.168\\.1\\.1\\n192\\.168\\.1\\.2\\n192\\.168\\.1\\.3\\n192\\.168\\.1\\.4\\n?$"
+  hint: |
+    `range(1, 5)` gives you 1, 2, 3, 4. Pair it with an f-string:
+
+        for i in range(1, 5):
+            print(f"192.168.1.{i}")

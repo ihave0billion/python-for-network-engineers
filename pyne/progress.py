@@ -18,6 +18,7 @@ def state_dir() -> Path:
 @dataclass
 class Progress:
     completed: set[int] = field(default_factory=set)
+    passed_checks: set[int] = field(default_factory=set)
     last_lesson_number: int | None = None
 
 
@@ -28,6 +29,7 @@ def load_progress() -> Progress:
     data = json.loads(path.read_text(encoding="utf-8"))
     return Progress(
         completed=set(data.get("completed", [])),
+        passed_checks=set(data.get("passed_checks", [])),
         last_lesson_number=data.get("last_lesson_number"),
     )
 
@@ -38,6 +40,7 @@ def save_progress(progress: Progress) -> None:
     path = directory / PROGRESS_FILENAME
     payload = {
         "completed": sorted(progress.completed),
+        "passed_checks": sorted(progress.passed_checks),
         "last_lesson_number": progress.last_lesson_number,
     }
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")

@@ -1,0 +1,34 @@
+# Knowledge check for Lesson 18 — Debugging Basics
+title: "Debugging Basics — Knowledge Check"
+
+mcq:
+  question: |
+    When you read a Python traceback, which frame is usually the most
+    useful for pinpointing the **cause** of the error?
+  options:
+    - "The first (top) frame, because that's where execution started."
+    - "The last (bottom) frame just above the exception type — closest to where the error was actually raised."
+    - "The middle frame, since errors tend to happen in the middle of a call stack."
+    - "Whichever frame mentions your username."
+  answer: 2
+  explain: |
+    Python prints tracebacks **outermost → innermost**. The bottom
+    frame is the line that actually triggered the exception; read
+    upward from there to follow how execution arrived. The very top
+    frame is usually just `<module>` or `main()`, which by itself
+    rarely tells you the cause.
+
+code_task:
+  prompt: |
+    Use `assert` to enforce an invariant: a port number must be
+    positive. The pre-declared port is already valid, so the assertion
+    should pass and the script should print exactly `ok`.
+  starter: |
+    port = 22
+    # TODO: assert port > 0 (with a useful message), then print "ok"
+  expected_stdout_regex: "^ok\\n?$"
+  hint: |
+    `assert` takes a condition and an optional message:
+
+        assert port > 0, "port must be positive"
+        print("ok")
